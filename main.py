@@ -218,7 +218,8 @@ f_list = {'%': NONE,
           '+-': sign_rev,
           '=': eval_exp}
 
-#hello
+# hello world
+# whats up
 
 buttons = [[Button(buttonField, text=f'{t}', command=lambda d=t: func(d)) for t in b] for b in buttonText]
 
