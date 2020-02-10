@@ -3,7 +3,6 @@ import math
 
 # window setup ->>
 
-
 top = Tk()
 top.geometry('350x400')
 
@@ -29,12 +28,6 @@ entry_str.set('0')
 
 # window setup end
 # functions start
-ans = DoubleVar()
-active_f_str = StringVar()
-active_f_bool = BooleanVar()
-active_f_bool.set(FALSE)
-active_num_bool = BooleanVar()
-active_num_bool.set(FALSE)
 
 
 def configure_button():
@@ -61,7 +54,6 @@ def func(obj):
     else:
         exp_str.set(exp_str.get() + entry_str.get() + obj)
         entry_str.set('0')
-    # entry_str.set(eval_exp(FALSE))
 
 
 def eval_exp(reset=TRUE):
@@ -96,105 +88,26 @@ def recp():
     eval_exp()
 
 
-'''
-def sqr():
-    x = float(entry_str.get())
-    exp_str.set(f'sqr({x ** 2})')
-    ans.set(x ** 2)
-    eval_exp()
+def bind_funcs():
+    for i in range(0, 10):
+        top.bind(i, lambda e=i: func(int(e.char)))
 
-
-def sq_root():
-    x = float(entry_str.get())
-    exp_str.set(f'sqr({math.sqrt(x)})')
-    ans.set(math.sqrt(x))
-    eval_exp()
-
-
-def add(y):
-    x = float(entry_str.get())
-    exp_str.set(f'{x} + {y}')
-    ans.set(x + y)
-
-
-def sub(y):
-    x = float(entry_str.get())
-    exp_str.set(f'{x} - {y}')
-    ans.set(x - y)
-
-
-def mul(y):
-    x = float(entry_str.get())
-    exp_str.set(f'{x} * {y}')
-    ans.set(x * y)
-
-
-def div(y):
-    x = float(entry_str.get())
-    exp_str.set(f'{x} / {y}')
-    ans.set(float(x / y))
-
-
-def sign_rev():
-    mul(-1)
-    eval_exp()
-
-
-def recp():
-    x = float(entry_str.get())
-    exp_str.set(f'recp({float(1 / x)})')
-    ans.set(float(1 / x))
-    eval_exp()
-
-
-def add_text(text):
-    if int(float(entry_str.get())) is 0:
-        entry_str.set('')
-    entry_str.set(entry_str.get() + str(text))
-
-
-def func(obj):
-    if isinstance(obj, int) and not active_f_bool.get():
-        add_text(obj)
-        return
-    try:
-        if active_f_bool.get():
-            if isinstance(obj, int):
-                if active_num_bool.get():
-                    add_text(obj)
-                    return
-                active_num_bool.set(TRUE)
-                entry_str.set(obj)
-                return
-            if active_num_bool.get():
-                f_list[active_f_str.get()](float(entry_str.get()))
-                active_num_bool.set(FALSE)
-                reset()
-        else:
-            if f_list[obj] in basic_f:
-                active_f_str.set(obj)
-                active_f_bool.set(TRUE)
-                exp_str.set(exp_str.get() + entry_str.get() + active_f_str.get())
-        if f_list[obj] not in basic_f:
-            f_list[obj]()
-
-    except ValueError:
-        exp_str.set('Error')
-
-
-def reset():
-    active_f_bool.set(FALSE)
-    active_f_str.set('')
-    exp_str.set('')
-
-
-def eval_exp():
-    entry_str.set(ans.get())
-    exp_str.set('')
-    ans.set('0')
-    reset()
-'''
-
+    top.bind("<Return>", lambda i: eval_exp())
+    top.bind('/', lambda i='/': func('/'))
+    top.bind('x', lambda i='x': func('X'))
+    top.bind('+', lambda i='+': func('+'))
+    top.bind('-', lambda i='-': func('-'))
+    top.bind('*', lambda i='*': func('X'))
+    top.bind('sq()', lambda i='sq': func('sq()'))
+    top.bind(f'x\N{SUPERSCRIPT TWO}', lambda i='*': func(f'x\N{SUPERSCRIPT TWO}'))
+    top.bind(f'\N{SUPERSCRIPT ONE}/x', lambda i='1/x': func(f'\N{SUPERSCRIPT ONE}/x'))
+    top.bind('CE', NONE)
+    top.bind('C', lambda i=0: func('C'))
+    top.bind('BackSpace',
+             lambda i=0: exp_str.set(exp_str.get()[:-1]) if len(entry_str.get()) is not 1 else entry_str.set('0'))
+    top.bind('X', lambda i='x': func('X'))
+    
+    
 # functions end constants start
 
 
@@ -204,9 +117,7 @@ buttonText = [['%', 'sq()', f'x\N{SUPERSCRIPT TWO}', f'\N{SUPERSCRIPT ONE}/x'],
               [4, 5, 6, '-'],
               [1, 2, 3, '+'],
               ['+-', 0, '.', '=']]
-'''
-basic_f = [add, sub, mul, div]
-'''
+
 f_list = {'%': NONE,
           'sq()': lambda: entry_str.set(math.sqrt(float(entry_str.get()))),
           f'x\N{SUPERSCRIPT TWO}': lambda: entry_str.set(float(entry_str.get())**2),
@@ -218,35 +129,11 @@ f_list = {'%': NONE,
           '+-': sign_rev,
           '=': eval_exp}
 
-# hello world
-# whats up
-
 buttons = [[Button(buttonField, text=f'{t}', command=lambda d=t: func(d)) for t in b] for b in buttonText]
 
-
-def bind_funcs():
-    for i in range(0, 10):
-        top.bind(i, lambda e=i: func(int(e.char)))
-
-    top.bind("<Return>", lambda i: eval_exp())
-    top.bind('/', lambda i='/': func('/'))
-    top.bind('x', lambda i='x': func('X'))
-    top.bind('+', lambda i='+': func('+'))
-    top.bind('-', lambda i='-': func('-'))
-    top.bind('*', lambda i='*': func('X'))
-    top.bind('sq()', lambda i='sq': func('sq()'))  # entry_str.set(math.sqrt(eval(exp_str.get()))))
-    top.bind(f'x\N{SUPERSCRIPT TWO}', lambda i='*': func(f'x\N{SUPERSCRIPT TWO}'))
-    top.bind(f'\N{SUPERSCRIPT ONE}/x', lambda i='1/x': func(f'\N{SUPERSCRIPT ONE}/x'))
-    top.bind('CE', NONE)
-    top.bind('C', lambda i=0: func('C'))
-    top.bind('BackSpace',
-             lambda i=0: exp_str.set(exp_str.get()[:-1]) if len(entry_str.get()) is not 1 else entry_str.set('0'))
-    top.bind('X', lambda i='x': func('X'))
-
-
 bind_funcs()
-# constants end Code section begin
 
+# constants end Code section begin
 
 for i, rw in enumerate(buttons):
     Grid.rowconfigure(buttonField, i, weight=1)
