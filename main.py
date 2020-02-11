@@ -9,28 +9,33 @@ top.geometry('350x400')
 frame = Frame(top, bg='dimgray')
 frame.pack(fill=BOTH, expand=YES)
 
+frame.rowconfigure(0, weight=2)
+frame.rowconfigure(1, weight=7)
+frame.columnconfigure(0, weight=1)
+
+
 textField = Frame(frame)
-textField.pack(fill=X, expand=YES)
+textField.grid(row=0, column=0, sticky='nsew')
 
 buttonField = Frame(frame, bg='blue')
-buttonField.pack(fill=BOTH, expand=YES)
+buttonField.grid(row=1, column=0, sticky='nsew')
 
 exp_str = StringVar()
-exp = Label(textField, bg=frame['bg'], justify=RIGHT, textvariable=exp_str)
+exp = Label(textField, bg=frame['bg'], justify='right', textvariable=exp_str)
 exp_str.set('')
-exp.pack(side=TOP, fill=X)
+exp.pack(fill=BOTH, expand=YES)
 
 entry_str = StringVar()
 entry = Entry(textField, relief=FLAT, bg='dimgray', fg='snow',
               justify='right', textvariable=entry_str, font="Ariel 20")
-entry.pack(fill=X, expand=YES)
+entry.pack(fill=BOTH, expand=YES)
 entry_str.set('0')
 
 # window setup end
 # functions start
 
 
-def configure_button():
+def configure_button(i, j):
     b.configure(width=6, bg='black', fg='white', relief=FLAT)
     b.grid(row=i, column=j, sticky='nsew')
     b.bind('<Enter>', lambda c: c.widget.configure(bg='grey'))
@@ -139,6 +144,6 @@ for i, rw in enumerate(buttons):
     Grid.rowconfigure(buttonField, i, weight=1)
     for j, b in enumerate(rw):
         Grid.columnconfigure(buttonField, j, weight=1)
-        configure_button()
+        configure_button(i, j)
 
 top.mainloop()
